@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Productivity Workspace</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background: #000;
+            color: #fff;
+            display: grid;
+            grid-template-columns: 250px 1fr 300px;
+            min-height: 100vh;
+            gap: 2rem;
+            padding: 2rem;
+        }
+
+        /* Left Sidebar */
+        .sidebar {
+            position: sticky;
+            top: 2rem;
+            height: calc(100vh - 4rem);
+        }
+
+        .category {
+            margin-bottom: 2rem;
+        }
+
+        .category h2 {
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .category h2:hover {
+            transform: translateX(5px);
+        }
+
+        .pages li {
+            list-style: none;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .pages li:hover {
+            transform: translateX(10px);
+        }
+
+        /* Center Content */
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .pomodoro {
+            text-align: center;
+        }
+
+        .timer {
+            font-size: 4rem;
+            margin: 1rem 0;
+            font-weight: 300;
+        }
+
+        .timer-controls button {
+            background: #222;
+            border: none;
+            color: white;
+            padding: 0.8rem 1.5rem;
+            margin: 0 0.5rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .todo-list input {
+            width: 100%;
+            padding: 1rem;
+            background: #111;
+            border: none;
+            color: white;
+            margin-top: 1rem;
+        }
+
+        .todo-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem;
+            background: #111;
+            margin: 0.5rem 0;
+        }
+
+        /* Right Sidebar */
+        .right-sidebar {
+            position: sticky;
+            top: 2rem;
+            height: calc(100vh - 4rem);
+        }
+
+        .clock {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .music-player {
+            background: #111;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+        }
+
+        .music-controls button {
+            background: none;
+            border: 1px solid #fff;
+            color: white;
+            padding: 0.5rem 1rem;
+            margin-top: 1rem;
+            cursor: pointer;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .social-icons a {
+            color: white;
+            font-size: 1.5rem;
+            transition: transform 0.2s;
+        }
+
+        .social-icons a:active {
+            transform: scale(0.9);
+        }
+
+        @media (max-width: 1200px) {
+            body {
+                grid-template-columns: 1fr;
+            }
+            .sidebar, .right-sidebar {
+                position: static;
+                height: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Left Sidebar -->
+    <div class="sidebar">
+        <div class="category">
+            <h2>Projects</h2>
+            <ul class="pages">
+                <li>Project 1</li>
+                <li>Project 2</li>
+                <li>Project 3</li>
+            </ul>
+        </div>
+        <div class="category">
+            <h2>Documents</h2>
+            <ul class="pages">
+                <li>Doc 1</li>
+                <li>Doc 2</li>
+                <li>Doc 3</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Center Content -->
+    <div class="main-content">
+        <div class="pomodoro">
+            <div class="timer">25:00</div>
+            <div class="timer-controls">
+                <button onclick="startTimer(25, 5)">25/5</button>
+                <button onclick="startTimer(60, 10)">60/10</button>
+            </div>
+        </div>
+        
+        <div class="todo-list">
+            <input type="text" placeholder="Add new task..." id="todoInput">
+            <div id="todoItems"></div>
+        </div>
+    </div>
+
+    <!-- Right Sidebar -->
+    <div class="right-sidebar">
+        <div class="clock" id="clock"></div>
+        <div class="music-player">
+            <audio id="player1" loop><source src="https://raw.githubusercontent.com/sewerkittenz/mewffles-assets/blob/main/White%20noise%20for%202%20minutes%20for%20Relaxation.mp3" type="audio/mpeg"></audio>
+            <button onclick="togglePlay(1)">Play</button>
+        </div>
+        <div class="music-player">
+            <audio id="player2" loop><source src="https://raw.githubusercontent.com/sewerkittenz/mewffles-assets/blob/main/Yo-Yo%20Ma%20Kathryn%20Stott%20-%20The%20Swan%20Saint-Sa%C3%ABns.mp3" type="audio/mpeg"></audio>
+            <button onclick="togglePlay(2)">Play</button>
+        </div>
+        <div class="social-icons">
+            <a href="#" target="_blank"><i class="fab fa-github"></i></a>
+            <a href="#" target="_blank"><i class="fab fa-youtube"></i></a>
+            <a href="#" target="_blank"><i class="fab fa-discord"></i></a>
+            <a href="#" target="_blank"><i class="fab fa-twitter"></i></a>
+            <!-- Add more icons as needed -->
+        </div>
+    </div>
+
+    <script>
+        // Pomodoro Timer
+        let timer;
+        function startTimer(minutes, breakMinutes) {
+            let time = minutes * 60;
+            const timerDisplay = document.querySelector('.timer');
+            
+            clearInterval(timer);
+            timer = setInterval(() => {
+                const mins = Math.floor(time / 60);
+                let secs = time % 60;
+                secs = secs < 10 ? '0' + secs : secs;
+                timerDisplay.textContent = `${mins}:${secs}`;
+                
+                if (time-- <= 0) {
+                    clearInterval(timer);
+                    alert('Time for break!');
+                }
+            }, 1000);
+        }
+
+        // Todo List
+        const todoInput = document.getElementById('todoInput');
+        const todoItems = document.getElementById('todoItems');
+        let todos = [];
+
+        todoInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && todoInput.value.trim()) {
+                todos.push(todoInput.value);
+                renderTodos();
+                todoInput.value = '';
+            }
+        });
+
+        function renderTodos() {
+            todoItems.innerHTML = todos.map((todo, index) => `
+                <div class="todo-item">
+                    ${todo}
+                    <button onclick="deleteTodo(${index})">×</button>
+                </div>
+            `).join('');
+        }
+
+        function deleteTodo(index) {
+            todos.splice(index, 1);
+            renderTodos();
+        }
+
+        // Clock
+        function updateClock() {
+            document.getElementById('clock').innerHTML = new Date().toLocaleTimeString('en-US', { timeZone: 'Asia/Tokyo' }) + '<br>' + 
+                new Date().toLocaleDateString('en-US', { timeZone: 'Asia/Tokyo' });
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // Music Player
+        function togglePlay(playerNum) {
+            const player = document.getElementById(`player${playerNum}`);
+            const btn = player.parentElement.querySelector('button');
+            if (player.paused) {
+                player.play();
+                btn.textContent = 'Pause';
+            } else {
+                player.pause();
+                btn.textContent = 'Play';
+            }
+        }
+    </script>
+</body>
+</html>
