@@ -3,93 +3,131 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Productivity Workspace</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>NEXUS Workspace</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
+        :root {
+            --ease: cubic-bezier(0.23, 1, 0.32, 1);
+            --gap: 2.5rem;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
         }
 
         body {
             background: #000;
             color: #fff;
             display: grid;
-            grid-template-columns: 250px 1fr 300px;
+            grid-template-columns: 240px 1fr 280px;
             min-height: 100vh;
-            gap: 2rem;
-            padding: 2rem;
+            gap: var(--gap);
+            padding: var(--gap);
+            line-height: 1.6;
         }
 
-        /* Left Sidebar */
-        .sidebar {
+        /* Left Navigation */
+        .nav-group {
             position: sticky;
-            top: 2rem;
-            height: calc(100vh - 4rem);
+            top: var(--gap);
+            height: calc(100vh - var(--gap)*2);
         }
 
         .category {
-            margin-bottom: 2rem;
+            margin-bottom: 2.5rem;
         }
 
         .category h2 {
-            font-size: 1.2rem;
-            margin-bottom: 1rem;
+            font-weight: 500;
+            font-size: 1.1rem;
+            letter-spacing: 0.5px;
+            margin-bottom: 1.2rem;
             cursor: pointer;
-            transition: transform 0.2s;
+            transition: transform 0.3s var(--ease);
         }
 
         .category h2:hover {
-            transform: translateX(5px);
+            transform: translateX(6px);
         }
 
         .pages li {
             list-style: none;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.8rem;
+            font-weight: 300;
             cursor: pointer;
-            transition: transform 0.2s;
+            opacity: 0.9;
+            transition: 0.3s var(--ease);
         }
 
         .pages li:hover {
             transform: translateX(10px);
+            opacity: 1;
         }
 
-        /* Center Content */
+        /* Center Section */
         .main-content {
             display: flex;
             flex-direction: column;
-            gap: 2rem;
+            gap: 3rem;
+            max-width: 800px;
+            margin: 0 auto;
+            width: 100%;
         }
 
+        /* Pomodoro Timer */
         .pomodoro {
             text-align: center;
         }
 
         .timer {
-            font-size: 4rem;
-            margin: 1rem 0;
-            font-weight: 300;
+            font-size: 5rem;
+            font-variant-numeric: tabular-nums;
+            margin: 1.5rem 0;
+            font-weight: 350;
         }
 
-        .timer-controls button {
-            background: #222;
-            border: none;
-            color: white;
-            padding: 0.8rem 1.5rem;
-            margin: 0 0.5rem;
-            cursor: pointer;
-            transition: background 0.2s;
+        .timer-controls {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
         }
 
-        .todo-list input {
-            width: 100%;
-            padding: 1rem;
+        .timer-btn {
             background: #111;
+            border: 1px solid #222;
+            padding: 1rem;
+            cursor: pointer;
+            transition: 0.3s var(--ease);
+            border-radius: 8px;
+        }
+
+        .timer-btn.active {
+            background: #222;
+            border-color: #333;
+        }
+
+        /* Todo List */
+        .todo-system {
+            background: #0a0a0a;
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+
+        .todo-input {
+            width: 100%;
+            background: transparent;
             border: none;
-            color: white;
-            margin-top: 1rem;
+            border-bottom: 1px solid #222;
+            padding: 1rem 0;
+            color: #fff;
+            font-size: 1rem;
+        }
+
+        .todo-items {
+            margin-top: 1.5rem;
         }
 
         .todo-item {
@@ -98,57 +136,77 @@
             padding: 1rem;
             background: #111;
             margin: 0.5rem 0;
+            border-radius: 6px;
         }
 
-        /* Right Sidebar */
-        .right-sidebar {
+        /* Right Panel */
+        .right-panel {
             position: sticky;
-            top: 2rem;
-            height: calc(100vh - 4rem);
-        }
-
-        .clock {
-            font-size: 2.5rem;
-            margin-bottom: 2rem;
-        }
-
-        .music-player {
-            background: #111;
-            padding: 1rem;
-            margin-bottom: 1rem;
-            border-radius: 8px;
-        }
-
-        .music-controls button {
-            background: none;
-            border: 1px solid #fff;
-            color: white;
-            padding: 0.5rem 1rem;
-            margin-top: 1rem;
-            cursor: pointer;
-        }
-
-        .social-icons {
+            top: var(--gap);
+            height: calc(100vh - var(--gap)*2);
             display: flex;
+            flex-direction: column;
+            gap: 2.5rem;
+        }
+
+        .time-display {
+            font-size: 2rem;
+            font-weight: 300;
+            letter-spacing: -0.5px;
+        }
+
+        /* Music Players */
+        .music-player {
+            background: #0a0a0a;
+            padding: 1.5rem;
+            border-radius: 12px;
+        }
+
+        .player-controls {
+            display: flex;
+            align-items: center;
             gap: 1rem;
-            margin-top: 2rem;
+            margin-top: 1rem;
         }
 
-        .social-icons a {
-            color: white;
-            font-size: 1.5rem;
-            transition: transform 0.2s;
+        .play-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 1px solid #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.3s var(--ease);
         }
 
-        .social-icons a:active {
-            transform: scale(0.9);
+        /* Social Links */
+        .social-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
         }
 
-        @media (max-width: 1200px) {
+        .social-card {
+            background: #0a0a0a;
+            padding: 1rem;
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.3s var(--ease);
+        }
+
+        .social-card:active {
+            transform: scale(0.95);
+        }
+
+        @media (max-width: 1600px) {
             body {
                 grid-template-columns: 1fr;
             }
-            .sidebar, .right-sidebar {
+            .nav-group, .right-panel {
                 position: static;
                 height: auto;
             }
@@ -156,130 +214,187 @@
     </style>
 </head>
 <body>
-    <!-- Left Sidebar -->
-    <div class="sidebar">
+    <!-- Left Navigation -->
+    <nav class="nav-group">
         <div class="category">
-            <h2>Projects</h2>
+            <h2>Productivity</h2>
             <ul class="pages">
-                <li>Project 1</li>
-                <li>Project 2</li>
-                <li>Project 3</li>
+                <li>Dashboard</li>
+                <li>Projects</li>
+                <li>Tasks</li>
             </ul>
         </div>
         <div class="category">
-            <h2>Documents</h2>
+            <h2>Knowledge</h2>
             <ul class="pages">
-                <li>Doc 1</li>
-                <li>Doc 2</li>
-                <li>Doc 3</li>
+                <li>Research</li>
+                <li>Documents</li>
+                <li>Library</li>
             </ul>
         </div>
-    </div>
+    </nav>
 
-    <!-- Center Content -->
-    <div class="main-content">
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Pomodoro Timer -->
         <div class="pomodoro">
-            <div class="timer">25:00</div>
+            <div class="timer" id="timer">25:00</div>
             <div class="timer-controls">
-                <button onclick="startTimer(25, 5)">25/5</button>
-                <button onclick="startTimer(60, 10)">60/10</button>
+                <button class="timer-btn" data-time="25">25m Work</button>
+                <button class="timer-btn" data-time="5">5m Break</button>
+                <button class="timer-btn" data-time="60">60m Focus</button>
+                <button class="timer-btn" data-time="10">10m Rest</button>
+            </div>
+            <div class="timer-actions">
+                <button class="control-btn" id="pauseBtn">Pause</button>
+                <button class="control-btn" id="resetBtn">Reset</button>
+            </div>
+        </div>
+
+        <!-- Todo List -->
+        <div class="todo-system">
+            <input type="text" class="todo-input" placeholder="Add task + press enter">
+            <div class="todo-items" id="todoItems"></div>
+        </div>
+    </main>
+
+    <!-- Right Panel -->
+    <aside class="right-panel">
+        <div class="time-display" id="time"></div>
+        
+        <!-- Music Players -->
+        <div class="music-player">
+            <audio id="player1" loop><source src="https://raw.githubusercontent.com/sewerkittenz/mewffles-assets/blob/main/White%20noise%20for%202%20minutes%20for%20Relaxation.mp3" type="audio/mpeg"></audio>
+            <div class="player-controls">
+                <div class="play-btn" onclick="togglePlay(1)">
+                    <i class="fas fa-play"></i>
+                </div>
+                <div class="track-info">Focus Session</div>
             </div>
         </div>
         
-        <div class="todo-list">
-            <input type="text" placeholder="Add new task..." id="todoInput">
-            <div id="todoItems"></div>
-        </div>
-    </div>
-
-    <!-- Right Sidebar -->
-    <div class="right-sidebar">
-        <div class="clock" id="clock"></div>
-        <div class="music-player">
-            <audio id="player1" loop><source src="https://raw.githubusercontent.com/sewerkittenz/mewffles-assets/blob/main/White%20noise%20for%202%20minutes%20for%20Relaxation.mp3" type="audio/mpeg"></audio>
-            <button onclick="togglePlay(1)">Play</button>
-        </div>
         <div class="music-player">
             <audio id="player2" loop><source src="https://raw.githubusercontent.com/sewerkittenz/mewffles-assets/blob/main/Yo-Yo%20Ma%20Kathryn%20Stott%20-%20The%20Swan%20Saint-Sa%C3%ABns.mp3" type="audio/mpeg"></audio>
-            <button onclick="togglePlay(2)">Play</button>
+            <div class="player-controls">
+                <div class="play-btn" onclick="togglePlay(2)">
+                    <i class="fas fa-play"></i>
+                </div>
+                <div class="track-info">Deep Work</div>
+            </div>
         </div>
-        <div class="social-icons">
-            <a href="#" target="_blank"><i class="fab fa-github"></i></a>
-            <a href="#" target="_blank"><i class="fab fa-youtube"></i></a>
-            <a href="#" target="_blank"><i class="fab fa-discord"></i></a>
-            <a href="#" target="_blank"><i class="fab fa-twitter"></i></a>
-            <!-- Add more icons as needed -->
+
+        <!-- Social Grid -->
+        <div class="social-grid">
+            <a href="https://github.com/" target="_blank" class="social-card">
+                <i class="fab fa-github"></i>
+            </a>
+            <a href="https://chat.deepseek.com/" target="_blank" class="social-card">
+                <i class="fas fa-brain"></i>
+            </a>
+            <a href="https://chatgpt.com/" target="_blank" class="social-card">
+                <i class="fas fa-comment"></i>
+            </a>
+            <a href="https://www.youtube.com/" target="_blank" class="social-card">
+                <i class="fab fa-youtube"></i>
+            </a>
+            <a href="https://discord.com/channels/@me" target="_blank" class="social-card">
+                <i class="fab fa-discord"></i>
+            </a>
+            <a href="https://x.com/home?lang=en" target="_blank" class="social-card">
+                <i class="fab fa-twitter"></i>
+            </a>
+            <a href="https://www.reddit.com/" target="_blank" class="social-card">
+                <i class="fab fa-reddit"></i>
+            </a>
+            <a href="https://quizlet.com/latest" target="_blank" class="social-card">
+                <i class="fas fa-book"></i>
+            </a>
         </div>
-    </div>
 
     <script>
-        // Pomodoro Timer
-        let timer;
-        function startTimer(minutes, breakMinutes) {
-            let time = minutes * 60;
-            const timerDisplay = document.querySelector('.timer');
+        // Timer System
+        let timeLeft;
+        let timerId = null;
+        let isPaused = false;
+
+        document.querySelectorAll('.timer-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const minutes = parseInt(btn.dataset.time);
+                startTimer(minutes * 60);
+            });
+        });
+
+        function startTimer(seconds) {
+            clearInterval(timerId);
+            timeLeft = seconds;
+            isPaused = false;
             
-            clearInterval(timer);
-            timer = setInterval(() => {
-                const mins = Math.floor(time / 60);
-                let secs = time % 60;
-                secs = secs < 10 ? '0' + secs : secs;
-                timerDisplay.textContent = `${mins}:${secs}`;
-                
-                if (time-- <= 0) {
-                    clearInterval(timer);
-                    alert('Time for break!');
+            timerId = setInterval(() => {
+                if(!isPaused) {
+                    timeLeft--;
+                    updateDisplay();
+                    
+                    if(timeLeft <= 0) {
+                        clearInterval(timerId);
+                        new Notification('Timer Complete!');
+                    }
                 }
             }, 1000);
         }
 
-        // Todo List
-        const todoInput = document.getElementById('todoInput');
-        const todoItems = document.getElementById('todoItems');
-        let todos = [];
+        // Todo System with LocalStorage
+        let todos = JSON.parse(localStorage.getItem('todos')) || [];
+        const todoInput = document.querySelector('.todo-input');
 
-        todoInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter' && todoInput.value.trim()) {
-                todos.push(todoInput.value);
-                renderTodos();
-                todoInput.value = '';
-            }
-        });
-
-        function renderTodos() {
-            todoItems.innerHTML = todos.map((todo, index) => `
-                <div class="todo-item">
-                    ${todo}
-                    <button onclick="deleteTodo(${index})">×</button>
-                </div>
-            `).join('');
-        }
-
-        function deleteTodo(index) {
-            todos.splice(index, 1);
+        function updateTodos() {
+            localStorage.setItem('todos', JSON.stringify(todos));
             renderTodos();
         }
 
-        // Clock
-        function updateClock() {
-            document.getElementById('clock').innerHTML = new Date().toLocaleTimeString('en-US', { timeZone: 'Asia/Tokyo' }) + '<br>' + 
-                new Date().toLocaleDateString('en-US', { timeZone: 'Asia/Tokyo' });
+        function renderTodos() {
+            document.getElementById('todoItems').innerHTML = todos
+                .map((todo, index) => `
+                    <div class="todo-item">
+                        ${todo}
+                        <span onclick="deleteTodo(${index})">&times;</span>
+                    </div>
+                `).join('');
         }
-        setInterval(updateClock, 1000);
-        updateClock();
 
-        // Music Player
+        // Music Players
         function togglePlay(playerNum) {
             const player = document.getElementById(`player${playerNum}`);
-            const btn = player.parentElement.querySelector('button');
-            if (player.paused) {
+            const icon = document.querySelector(`#player${playerNum} + .player-controls .fa`);
+            
+            if(player.paused) {
                 player.play();
-                btn.textContent = 'Pause';
+                icon.classList.replace('fa-play', 'fa-pause');
             } else {
                 player.pause();
-                btn.textContent = 'Play';
+                icon.classList.replace('fa-pause', 'fa-play');
             }
         }
+
+        // Tokyo Time
+        function updateTime() {
+            const options = { 
+                timeZone: 'Asia/Tokyo', 
+                hour12: false, 
+                hour: 'numeric', 
+                minute: 'numeric', 
+                second: 'numeric',
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            };
+            document.getElementById('time').innerHTML = new Date().toLocaleDateString('en-US', options);
+        }
+
+        // Initialization
+        updateTime();
+        setInterval(updateTime, 1000);
+        renderTodos();
     </script>
 </body>
 </html>
