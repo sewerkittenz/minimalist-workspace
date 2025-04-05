@@ -1,400 +1,380 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="luxury">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEXUS Workspace</title>
+    <title>NEXUS | Enterprise Worksuite</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
         :root {
-            --ease: cubic-bezier(0.23, 1, 0.32, 1);
-            --gap: 2.5rem;
+            --primary: #1A1A1A;
+            --accent: #FF4D6D;
+            --text: #F0EBE3;
+            --glass: rgba(25, 25, 25, 0.8);
+            --ease: cubic-bezier(0.4, 0, 0.2, 1);
+            --font-primary: 'Neue Haas Grotesk', -apple-system, BlinkMacSystemFont;
+            --font-accent: 'PP Right Gothic', sans-serif;
+        }
+
+        @font-face {
+            font-family: 'PP Right Gothic';
+            src: url('https://fonts.cdnfonts.com/s/93109/PPRightGothic-Medium.woff') format('woff');
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
         }
 
         body {
-            background: #000;
-            color: #fff;
+            background: var(--primary);
+            color: var(--text);
+            font-family: var(--font-primary);
             display: grid;
-            grid-template-columns: 240px 1fr 280px;
+            grid-template-columns: 280px 1fr 320px;
             min-height: 100vh;
-            gap: var(--gap);
-            padding: var(--gap);
+            gap: 2rem;
+            padding: 2rem;
             line-height: 1.6;
+            backdrop-filter: blur(20px);
         }
 
         /* Left Navigation */
         .nav-group {
             position: sticky;
-            top: var(--gap);
-            height: calc(100vh - var(--gap)*2);
-        }
-
-        .category {
-            margin-bottom: 2.5rem;
+            top: 2rem;
+            height: calc(100vh - 4rem);
+            background: var(--glass);
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
         .category h2 {
-            font-weight: 500;
-            font-size: 1.1rem;
-            letter-spacing: 0.5px;
-            margin-bottom: 1.2rem;
-            cursor: pointer;
-            transition: transform 0.3s var(--ease);
+            font-family: var(--font-accent);
+            font-weight: 600;
+            font-size: 1.25rem;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.5px;
+            position: relative;
+            padding-left: 1rem;
         }
 
-        .category h2:hover {
-            transform: translateX(6px);
+        .category h2::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 60%;
+            background: var(--accent);
+            border-radius: 2px;
         }
 
         .pages li {
             list-style: none;
-            margin-bottom: 0.8rem;
-            font-weight: 300;
+            margin-bottom: 0.75rem;
+            padding: 0.75rem 1rem;
+            border-radius: 0.75rem;
             cursor: pointer;
-            opacity: 0.9;
+            transition: 0.3s var(--ease);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pages li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 3px;
+            height: 100%;
+            background: var(--accent);
+            transform: translateX(-100%);
             transition: 0.3s var(--ease);
         }
 
         .pages li:hover {
-            transform: translateX(10px);
-            opacity: 1;
+            background: rgba(255,255,255,0.03);
         }
 
-        /* Center Section */
+        .pages li:hover::before {
+            transform: translateX(0);
+        }
+
+        /* Main Workspace */
         .main-content {
             display: flex;
             flex-direction: column;
-            gap: 3rem;
-            max-width: 800px;
-            margin: 0 auto;
-            width: 100%;
+            gap: 2rem;
+            padding-right: 2rem;
         }
 
-        /* Pomodoro Timer */
-        .pomodoro {
-            text-align: center;
+        /* Dynamic Content System */
+        .workspace-module {
+            background: var(--glass);
+            border-radius: 1.5rem;
+            padding: 2rem;
+            border: 1px solid rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
         }
 
-        .timer {
-            font-size: 5rem;
+        /* Enterprise Timer */
+        .chrono-system {
+            position: relative;
+            padding: 2rem;
+        }
+
+        .chrono-display {
+            font-size: 4.5rem;
             font-variant-numeric: tabular-nums;
-            margin: 1.5rem 0;
-            font-weight: 350;
+            font-weight: 450;
+            text-align: center;
+            margin: 2rem 0;
+            position: relative;
         }
 
-        .timer-controls {
+        .chrono-display::after {
+            content: '';
+            position: absolute;
+            bottom: -1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 3px;
+            background: var(--accent);
+        }
+
+        .chrono-controls {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(4, 1fr);
             gap: 1rem;
         }
 
-        .timer-btn {
-            background: #111;
-            border: 1px solid #222;
+        .chrono-preset {
+            background: none;
+            border: 1px solid rgba(255,255,255,0.1);
             padding: 1rem;
+            border-radius: 0.75rem;
             cursor: pointer;
             transition: 0.3s var(--ease);
-            border-radius: 8px;
         }
 
-        .timer-btn.active {
-            background: #222;
-            border-color: #333;
+        .chrono-preset:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
         }
 
-        /* Todo List */
-        .todo-system {
-            background: #0a0a0a;
-            border-radius: 12px;
-            padding: 1.5rem;
+        /* Todo Matrix */
+        .task-matrix {
+            position: relative;
         }
 
-        .todo-input {
+        .task-input {
             width: 100%;
-            background: transparent;
+            background: none;
             border: none;
-            border-bottom: 1px solid #222;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
             padding: 1rem 0;
-            color: #fff;
-            font-size: 1rem;
+            font-size: 1.1rem;
+            color: var(--text);
         }
 
-        .todo-items {
+        .task-list {
             margin-top: 1.5rem;
         }
 
-        .todo-item {
+        .task-item {
             display: flex;
             justify-content: space-between;
             padding: 1rem;
-            background: #111;
             margin: 0.5rem 0;
-            border-radius: 6px;
+            border-radius: 0.75rem;
+            background: rgba(0,0,0,0.3);
+            transition: 0.3s var(--ease);
         }
 
         /* Right Panel */
-        .right-panel {
+        .data-panel {
             position: sticky;
-            top: var(--gap);
-            height: calc(100vh - var(--gap)*2);
+            top: 2rem;
+            height: calc(100vh - 4rem);
             display: flex;
             flex-direction: column;
-            gap: 2.5rem;
+            gap: 2rem;
         }
 
+        /* Quantum Clock */
         .time-display {
-            font-size: 2rem;
-            font-weight: 300;
+            font-family: var(--font-accent);
+            font-size: 1.75rem;
             letter-spacing: -0.5px;
         }
 
-        /* Music Players */
-        .music-player {
-            background: #0a0a0a;
+        /* Media Nexus */
+        .media-nexus {
+            background: var(--glass);
+            border-radius: 1.5rem;
             padding: 1.5rem;
-            border-radius: 12px;
         }
 
-        .player-controls {
+        .audio-interface {
             display: flex;
             align-items: center;
             gap: 1rem;
             margin-top: 1rem;
         }
 
-        .play-btn {
-            width: 40px;
+        .waveform-visualizer {
+            flex-grow: 1;
             height: 40px;
-            border-radius: 50%;
-            border: 1px solid #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: 0.3s var(--ease);
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            position: relative;
+            overflow: hidden;
         }
 
-        /* Social Links */
-        .social-grid {
+        /* Social Grid */
+        .nexus-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(3, 1fr);
             gap: 1rem;
         }
 
-        .social-card {
-            background: #0a0a0a;
+        .nexus-portal {
+            background: var(--glass);
+            border-radius: 1rem;
             padding: 1rem;
-            border-radius: 8px;
             display: flex;
             justify-content: center;
+            align-items: center;
             cursor: pointer;
+            transition: 0.3s var(--ease);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nexus-portal::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--accent);
+            opacity: 0;
             transition: 0.3s var(--ease);
         }
 
-        .social-card:active {
-            transform: scale(0.95);
+        .nexus-portal:hover::after {
+            opacity: 0.1;
         }
 
         @media (max-width: 1600px) {
-            body {
-                grid-template-columns: 1fr;
-            }
-            .nav-group, .right-panel {
-                position: static;
-                height: auto;
-            }
+            body { grid-template-columns: 1fr; }
+            .nav-group, .data-panel { position: static; }
         }
     </style>
+    <link href="https://fonts.cdnfonts.com/css/neue-haas-grotesk" rel="stylesheet">
 </head>
 <body>
     <!-- Left Navigation -->
     <nav class="nav-group">
         <div class="category">
-            <h2>Productivity</h2>
+            <h2>WORKFLOWS</h2>
             <ul class="pages">
-                <li>Dashboard</li>
-                <li>Projects</li>
-                <li>Tasks</li>
+                <li data-module="chrono">Time Architect</li>
+                <li data-module="tasks">Task Matrix</li>
+                <li data-module="analytics">Performance Nexus</li>
             </ul>
         </div>
         <div class="category">
-            <h2>Knowledge</h2>
+            <h2>KNOWLEDGE VAULT</h2>
             <ul class="pages">
-                <li>Research</li>
-                <li>Documents</li>
-                <li>Library</li>
+                <li data-module="projects">Project Forge</li>
+                <li data-module="research">Intelligence Hub</li>
+                <li data-module="library">Asset Vault</li>
             </ul>
         </div>
     </nav>
 
-    <!-- Main Content -->
+    <!-- Main Workspace -->
     <main class="main-content">
-        <!-- Pomodoro Timer -->
-        <div class="pomodoro">
-            <div class="timer" id="timer">25:00</div>
-            <div class="timer-controls">
-                <button class="timer-btn" data-time="25">25m Work</button>
-                <button class="timer-btn" data-time="5">5m Break</button>
-                <button class="timer-btn" data-time="60">60m Focus</button>
-                <button class="timer-btn" data-time="10">10m Rest</button>
-            </div>
-            <div class="timer-actions">
-                <button class="control-btn" id="pauseBtn">Pause</button>
-                <button class="control-btn" id="resetBtn">Reset</button>
+        <!-- Time Architect Module -->
+        <div class="workspace-module" id="chrono">
+            <div class="chrono-system">
+                <div class="chrono-display">25:00:00</div>
+                <div class="chrono-controls">
+                    <button class="chrono-preset">25m</button>
+                    <button class="chrono-preset">5m</button>
+                    <button class="chrono-preset">60m</button>
+                    <button class="chrono-preset">10m</button>
+                </div>
             </div>
         </div>
 
-        <!-- Todo List -->
-        <div class="todo-system">
-            <input type="text" class="todo-input" placeholder="Add task + press enter">
-            <div class="todo-items" id="todoItems"></div>
+        <!-- Task Matrix Module -->
+        <div class="workspace-module" id="tasks">
+            <div class="task-matrix">
+                <input type="text" class="task-input" placeholder="Input task...">
+                <div class="task-list" id="taskItems"></div>
+            </div>
         </div>
     </main>
 
-    <!-- Right Panel -->
-    <aside class="right-panel">
-        <div class="time-display" id="time"></div>
-        
-        <!-- Music Players -->
-        <div class="music-player">
-            <audio id="player1" loop><source src="https://raw.githubusercontent.com/sewerkittenz/mewffles-assets/blob/main/White%20noise%20for%202%20minutes%20for%20Relaxation.mp3" type="audio/mpeg"></audio>
-            <div class="player-controls">
-                <div class="play-btn" onclick="togglePlay(1)">
-                    <i class="fas fa-play"></i>
-                </div>
-                <div class="track-info">Focus Session</div>
-            </div>
-        </div>
-        
-        <div class="music-player">
-            <audio id="player2" loop><source src="https://raw.githubusercontent.com/sewerkittenz/mewffles-assets/blob/main/Yo-Yo%20Ma%20Kathryn%20Stott%20-%20The%20Swan%20Saint-Sa%C3%ABns.mp3" type="audio/mpeg"></audio>
-            <div class="player-controls">
-                <div class="play-btn" onclick="togglePlay(2)">
-                    <i class="fas fa-play"></i>
-                </div>
-                <div class="track-info">Deep Work</div>
-            </div>
-        </div>
-
-        <!-- Social Grid -->
-        <div class="social-grid">
-            <a href="https://github.com/" target="_blank" class="social-card">
-                <i class="fab fa-github"></i>
-            </a>
-            <a href="https://chat.deepseek.com/" target="_blank" class="social-card">
-                <i class="fas fa-brain"></i>
-            </a>
-            <a href="https://chatgpt.com/" target="_blank" class="social-card">
-                <i class="fas fa-comment"></i>
-            </a>
-            <a href="https://www.youtube.com/" target="_blank" class="social-card">
-                <i class="fab fa-youtube"></i>
-            </a>
-            <a href="https://discord.com/channels/@me" target="_blank" class="social-card">
-                <i class="fab fa-discord"></i>
-            </a>
-            <a href="https://x.com/home?lang=en" target="_blank" class="social-card">
-                <i class="fab fa-twitter"></i>
-            </a>
-            <a href="https://www.reddit.com/" target="_blank" class="social-card">
-                <i class="fab fa-reddit"></i>
-            </a>
-            <a href="https://quizlet.com/latest" target="_blank" class="social-card">
-                <i class="fas fa-book"></i>
-            </a>
-        </div>
+    <!-- Data Panel -->
+    <aside class="data-panel">
+        <!-- Time Display & Media Players -->
+    </aside>
 
     <script>
-        // Timer System
-        let timeLeft;
-        let timerId = null;
-        let isPaused = false;
+        // Enterprise State Management
+        class NexusCore {
+            constructor() {
+                this.modules = new Map();
+                this.init();
+            }
 
-        document.querySelectorAll('.timer-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const minutes = parseInt(btn.dataset.time);
-                startTimer(minutes * 60);
-            });
-        });
+            init() {
+                this.loadState();
+                this.initModules();
+                this.initEventListeners();
+            }
 
-        function startTimer(seconds) {
-            clearInterval(timerId);
-            timeLeft = seconds;
-            isPaused = false;
-            
-            timerId = setInterval(() => {
-                if(!isPaused) {
-                    timeLeft--;
-                    updateDisplay();
-                    
-                    if(timeLeft <= 0) {
-                        clearInterval(timerId);
-                        new Notification('Timer Complete!');
-                    }
-                }
-            }, 1000);
-        }
+            loadState() {
+                // Load from IndexedDB
+            }
 
-        // Todo System with LocalStorage
-        let todos = JSON.parse(localStorage.getItem('todos')) || [];
-        const todoInput = document.querySelector('.todo-input');
+            initModules() {
+                document.querySelectorAll('.workspace-module').forEach(module => {
+                    this.modules.set(module.id, {
+                        element: module,
+                        state: 'inactive'
+                    });
+                });
+            }
 
-        function updateTodos() {
-            localStorage.setItem('todos', JSON.stringify(todos));
-            renderTodos();
-        }
+            initEventListeners() {
+                document.querySelectorAll('.pages li').forEach(item => {
+                    item.addEventListener('click', () => {
+                        this.activateModule(item.dataset.module);
+                    });
+                });
+            }
 
-        function renderTodos() {
-            document.getElementById('todoItems').innerHTML = todos
-                .map((todo, index) => `
-                    <div class="todo-item">
-                        ${todo}
-                        <span onclick="deleteTodo(${index})">&times;</span>
-                    </div>
-                `).join('');
-        }
+            activateModule(moduleId) {
+                this.modules.forEach((module, id) => {
+                    module.element.style.display = id === moduleId ? 'block' : 'none';
+                });
+                this.animateTransition(moduleId);
+            }
 
-        // Music Players
-        function togglePlay(playerNum) {
-            const player = document.getElementById(`player${playerNum}`);
-            const icon = document.querySelector(`#player${playerNum} + .player-controls .fa`);
-            
-            if(player.paused) {
-                player.play();
-                icon.classList.replace('fa-play', 'fa-pause');
-            } else {
-                player.pause();
-                icon.classList.replace('fa-pause', 'fa-play');
+            animateTransition(moduleId) {
+                // GSAP animations would go here
             }
         }
 
-        // Tokyo Time
-        function updateTime() {
-            const options = { 
-                timeZone: 'Asia/Tokyo', 
-                hour12: false, 
-                hour: 'numeric', 
-                minute: 'numeric', 
-                second: 'numeric',
-                weekday: 'long',
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-            };
-            document.getElementById('time').innerHTML = new Date().toLocaleDateString('en-US', options);
-        }
-
-        // Initialization
-        updateTime();
-        setInterval(updateTime, 1000);
-        renderTodos();
+        // Initialize Nexus Core
+        const nexus = new NexusCore();
     </script>
 </body>
 </html>
